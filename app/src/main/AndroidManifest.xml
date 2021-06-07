@@ -25,7 +25,7 @@
         </service>
 
         <activity
-            android:name="com.abifog.com.emotion.chat.latin.settings.SettingsActivity"
+            android:name="com.emotion.chat.latin.settings.SettingsActivity"
             android:label="@string/english_ime_name"
             android:theme="@style/platformSettingsTheme">
             <intent-filter>
@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Broadcast receivers -->
-        <receiver android:name="com.abifog.com.emotion.chat.latin.SystemBroadcastReceiver">
+        <receiver android:name="com.emotion.chat.latin.SystemBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>

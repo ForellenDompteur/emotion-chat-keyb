@@ -529,6 +529,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
                 && PointerTracker.getActivePointerTrackerCount() == 1) {
             return true;
         }
+        Log.d("TAG", Float.toString(event.getPressure()));
         tracker.processMotionEvent(event, mKeyDetector);
         return true;
     }
