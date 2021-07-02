@@ -522,6 +522,12 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     public boolean processMotionEvent(final MotionEvent event) {
         final int index = event.getActionIndex();
         final int id = event.getPointerId(index);
+        final float pressure = event.getPressure(index);
+        final float size = event.getSize();
+
+        Log.d("Pressure2", String.valueOf(pressure));
+        Log.d("Size", String.valueOf(size));
+
         final PointerTracker tracker = PointerTracker.getPointerTracker(id);
         // When a more keys panel is showing, we should ignore other fingers' single touch events
         // other than the finger that is showing the more keys panel.

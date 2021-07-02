@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 
 import java.util.ArrayList;
 
@@ -414,6 +415,11 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
     public void processMotionEvent(final MotionEvent me, final KeyDetector keyDetector) {
         final int action = me.getActionMasked();
         final long eventTime = me.getEventTime();
+
+        Log.d("eventTime", String.valueOf(eventTime));
+        Log.d("pressureValue", String.valueOf(me.getPressure()));
+
+
         if (action == MotionEvent.ACTION_MOVE) {
             // When this pointer is the only active pointer and is showing a more keys panel,
             // we should ignore other pointers' motion event.
