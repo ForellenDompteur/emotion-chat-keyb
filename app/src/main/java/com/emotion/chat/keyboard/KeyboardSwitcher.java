@@ -374,6 +374,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             mKeyboardView.closing();
         }
 
+        Log.d(TAG, "CREATE INPUT VIEW");
+
         updateKeyboardThemeAndContextThemeWrapper(
                 mLatinIME, KeyboardTheme.getKeyboardTheme(mLatinIME /* context */));
         mCurrentInputView = (InputView)LayoutInflater.from(mThemeContext).inflate(

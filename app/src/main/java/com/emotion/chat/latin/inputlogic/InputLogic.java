@@ -26,6 +26,7 @@ import java.util.TreeSet;
 
 import com.emotion.chat.event.Event;
 import com.emotion.chat.event.InputTransaction;
+import com.emotion.chat.event.TimerSingleton;
 import com.emotion.chat.latin.LatinIME;
 import com.emotion.chat.latin.RichInputConnection;
 import com.emotion.chat.latin.common.Constants;
@@ -41,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Date;
 
+import static com.emotion.chat.keyboard.MainKeyboardView.sensorData;
 
 
 /**
@@ -190,9 +192,19 @@ public final class InputLogic {
             File outfile = new File(mLatinIME.getExternalFilesDir(null), fileName);
             FileOutputStream keyboardFOut = new FileOutputStream(outfile,true);
             keyboardFOut.write(fileContents.getBytes());
+
+            Log.d("INPUTLOGIC", fileContents);
+            String dataCollected = "";
+            if (fileContents.equals(" ")) {
+                Log.d("ENTER", "YOU PRESSED ENTER");
+                dataCollected = "[WPM: " + TimerSingleton.getElapsedTime() + "," +
+                        "Touch Size: " + sensorData.getSize() + "," +
+                        "Brightness: " + sensorData.getBrightness() + "]\n";
+                keyboardFOut.write(dataCollected.getBytes());
+            }
             keyboardFOut.close();
 
-            // Log.d("INFO", "written");
+            Log.d("INFO", "written");
 
 
 
@@ -622,16 +634,11 @@ public final class InputLogic {
      *
      * @param codePoint the code point to send.
      */
-    // TODO: replace these two parameters with an InputTransaction
     private void sendKeyCodePoint(final int codePoint) {
-        // TODO: Remove this special handling of digit letters.
-        // For backward compatibility. See {@link InputMethodService#sendKeyChar(char)}.
-
-
         // The pressedChar string holds the pressed key label
-
         String pressedChar;
 
+        Log.d("CODE POINT", String.valueOf(codePoint));
 
         // Special case for numbers
         if (codePoint >= '0' && codePoint <= '9') {
@@ -643,6 +650,8 @@ public final class InputLogic {
 
             pressedChar = StringUtils.newSingleCodePointString(codePoint);
             mConnection.commitText(StringUtils.newSingleCodePointString(codePoint), 1);
+
+            Log.d("PRESSED CHAR", pressedChar);
         }
 
 

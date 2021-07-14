@@ -212,6 +212,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
             sListener.onPressKey(key.getCode(), repeatCount, getActivePointerTrackerCount() == 1);
             final boolean keyboardLayoutHasBeenChanged = mKeyboardLayoutHasBeenChanged;
             mKeyboardLayoutHasBeenChanged = false;
+            Log.d(TAG, "STARTING THE TIMER");
             sTimerProxy.startTypingStateTimer(key);
             return keyboardLayoutHasBeenChanged;
         }

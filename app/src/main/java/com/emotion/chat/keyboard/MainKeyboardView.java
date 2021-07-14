@@ -30,6 +30,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,6 +50,7 @@ import com.emotion.chat.latin.RichInputMethodManager;
 import com.emotion.chat.latin.RichInputMethodSubtype;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.common.CoordinateUtils;
+import com.emotion.chat.latin.inputlogic.SensorData;
 import com.emotion.chat.latin.utils.LanguageOnSpacebarUtils;
 import com.emotion.chat.latin.utils.TypefaceUtils;
 
@@ -94,6 +96,10 @@ import com.emotion.chat.latin.utils.TypefaceUtils;
 public final class MainKeyboardView extends KeyboardView implements MoreKeysPanel.Controller, DrawingProxy {
     private static final String TAG = MainKeyboardView.class.getSimpleName();
 
+    // Motion tracking
+    //private VelocityTracker mVelocityTracker = null;
+    public static SensorData sensorData;
+
     /** Listener for {@link KeyboardActionListener}. */
     private KeyboardActionListener mKeyboardActionListener;
 
@@ -128,8 +134,6 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     private final View mMoreKeysKeyboardContainer;
     private final WeakHashMap<Key, Keyboard> mMoreKeysKeyboardCache = new WeakHashMap<>();
     private final boolean mConfigShowMoreKeysKeyboardAtTouchedPoint;
-    // More keys panel (used by both more keys keyboard and more suggestions view)
-    // TODO: Consider extending to support multiple more keys panels
     private MoreKeysPanel mMoreKeysPanel;
 
     private final KeyDetector mKeyDetector;
@@ -144,6 +148,8 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
 
     public MainKeyboardView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
+
+        Log.d(TAG, "OPEN KEYBOARD");
 
         final DrawingPreviewPlacerView drawingPreviewPlacerView =
                 new DrawingPreviewPlacerView(context, attrs);
@@ -293,6 +299,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
      */
     @Override
     public void setKeyboard(final Keyboard keyboard) {
+        Log.d(TAG, "OPEN KEYBOARD");
         // Remove any pending messages, except dismissing preview and key repeat.
         mTimerHandler.cancelLongPressTimers();
         super.setKeyboard(keyboard);
@@ -340,6 +347,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     @Override
     public void onKeyPressed(final Key key, final boolean withPreview) {
         key.onPressed();
+        Log.d(TAG, String.valueOf(key.getWidth()));
         invalidateKey(key);
         if (withPreview && !key.noKeyPreview()) {
             showKeyPreview(key);
@@ -507,6 +515,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
         if (getKeyboard() == null) {
             return false;
         }
+
         if (mNonDistinctMultitouchHelper != null) {
             if (event.getPointerCount() > 1 && mTimerHandler.isInKeyRepeat()) {
                 // Key repeating timer will be canceled if 2 or more keys are in action.
@@ -524,9 +533,49 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
         final int id = event.getPointerId(index);
         final float pressure = event.getPressure(index);
         final float size = event.getSize();
+        int action = event.getActionMasked();
+
+        if (sensorData != null) {
+            sensorData.setSize(size);
+        }
+
 
         Log.d("Pressure2", String.valueOf(pressure));
         Log.d("Size", String.valueOf(size));
+
+
+//        switch(action) {
+//            case MotionEvent.ACTION_DOWN:
+//                if(mVelocityTracker == null) {
+//                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
+//                    mVelocityTracker = VelocityTracker.obtain();
+//                }
+//                else {
+//                    // Reset the velocity tracker back to its initial state.
+//                    mVelocityTracker.clear();
+//                }
+//                // Add a user's movement to the tracker.
+//                mVelocityTracker.addMovement(event);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                mVelocityTracker.addMovement(event);
+//                // When you want to determine the velocity, call
+//                // computeCurrentVelocity(). Then call getXVelocity()
+//                // and getYVelocity() to retrieve the velocity for each pointer ID.
+//                mVelocityTracker.computeCurrentVelocity(1000);
+//                // Log velocity of pixels per second
+//                // Best practice to use VelocityTrackerCompat where possible.
+//                Log.d("", "X velocity: " + mVelocityTracker.getXVelocity(id));
+//                Log.d("", "Y velocity: " + mVelocityTracker.getYVelocity(id));
+//                break;
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_CANCEL:
+//                // Return a VelocityTracker object back to be re-used by others.
+//                mVelocityTracker.recycle();
+//                break;
+//        }
+
+        //mVelocityTracker.recycle();
 
         final PointerTracker tracker = PointerTracker.getPointerTracker(id);
         // When a more keys panel is showing, we should ignore other fingers' single touch events
@@ -548,6 +597,11 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     }
 
     public void closing() {
+        Log.d(TAG, "CLOSE KEYBOARD");
+
+//        if (mVelocityTracker != null) {
+//            mVelocityTracker.recycle();
+//        }
         cancelAllOngoingEvents();
         mMoreKeysKeyboardCache.clear();
     }

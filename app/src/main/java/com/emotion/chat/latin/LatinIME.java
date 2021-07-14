@@ -80,7 +80,7 @@ import com.emotion.chat.latin.utils.ResourceUtils;
 import com.emotion.chat.latin.utils.ViewLayoutUtils;
 
 /**
- * Input method implementation for Qwerty'ish keyboard.
+ * Input method implementation for Qwerty keyboard.
  */
 public class LatinIME extends InputMethodService implements KeyboardActionListener {
     static final String TAG = LatinIME.class.getSimpleName();
@@ -96,7 +96,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     private int mOriginalNavBarFlags = 0;
     final InputLogic mInputLogic = new InputLogic(this /* LatinIME */);
 
-    // TODO: Move these {@link View}s to {@link KeyboardSwitcher}.
     private View mInputView;
     private InsetsUpdater mInsetsUpdater;
 
@@ -251,6 +250,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
 
         public void onStartInputView(final EditorInfo editorInfo, final boolean restarting) {
+            Log.d(TAG, "OPEN THE INPUT VIEW");
             if (hasMessages(MSG_PENDING_IMS_CALLBACK)
                     && KeyboardId.equivalentEditorInfoForKeyboard(editorInfo, mAppliedEditorInfo)) {
                 // Typically this is the second onStartInputView after orientation changed.
@@ -274,6 +274,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
 
         public void onFinishInputView(final boolean finishingInput) {
+            Log.d(TAG, "CLOSE THE INPUT VIEW");
             if (hasMessages(MSG_PENDING_IMS_CALLBACK)) {
                 // Typically this is the first onFinishInputView after orientation changed.
                 mHasPendingFinishInputView = true;
@@ -334,6 +335,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "CREATE KEYBOARD");
         Settings.init(this);
         DebugFlags.init(PreferenceManager.getDefaultSharedPreferences(this));
         RichInputMethodManager.init(this);
@@ -344,8 +346,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         mHandler.onCreate();
 
-        // TODO: Resolve mutual dependencies of {@link #loadSettings()} and
-        // {@link #resetDictionaryFacilitatorIfNecessary()}.
         loadSettings();
 
         // Register to receive ringer mode change.
@@ -796,8 +796,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         }
         catch (Exception e) {
-            // TODO Auto-generated catch block
-
             Log.d("ERROR" , "Something went wrong");
         }
 
