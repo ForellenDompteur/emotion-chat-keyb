@@ -193,15 +193,15 @@ public final class InputLogic {
             FileOutputStream keyboardFOut = new FileOutputStream(outfile,true);
             keyboardFOut.write(fileContents.getBytes());
 
-            Log.d("INPUTLOGIC", fileContents);
-            String dataCollected = "";
-            if (fileContents.equals(" ")) {
-                Log.d("ENTER", "YOU PRESSED ENTER");
-                dataCollected = "[WPM: " + TimerSingleton.getElapsedTime() + "," +
-                        "Touch Size: " + sensorData.getSize() + "," +
-                        "Brightness: " + sensorData.getBrightness() + "]\n";
-                keyboardFOut.write(dataCollected.getBytes());
-            }
+//            Log.d("INPUTLOGIC", fileContents);
+//            String dataCollected = "";
+//            if (fileContents.equals(" ")) {
+//                Log.d("ENTER", "YOU PRESSED ENTER");
+//                dataCollected = "[WPM: " + TimerSingleton.getElapsedTime() + "," +
+//                        "Touch Size: " + sensorData.getSize() + "," +
+//                        "Brightness: " + sensorData.getBrightness() + "]\n";
+//                keyboardFOut.write(dataCollected.getBytes());
+//            }
             keyboardFOut.close();
 
             Log.d("INFO", "written");
