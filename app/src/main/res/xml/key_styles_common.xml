@@ -78,7 +78,6 @@
         latin:backgroundType="functional" />
     <include
         latin:keyboardLayout="@xml/key_styles_enter" />
-    <!-- TODO: Currently there is no way to specify icon alignment per theme. -->
     <key-style
         latin:styleName="spaceKeyStyle"
         latin:keySpec="!icon/space_key|!code/key_space"

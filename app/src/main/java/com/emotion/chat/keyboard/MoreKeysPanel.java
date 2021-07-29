@@ -58,8 +58,6 @@ public interface MoreKeysPanel {
      * @param listener the listener that will receive keyboard action from this
      * {@link MoreKeysPanel}.
      */
-    // TODO: Currently the MoreKeysPanel is inside a container view that is added to the parent.
-    // Consider the simpler approach of placing the MoreKeysPanel itself into the parent view.
     void showMoreKeysPanel(View parentView, Controller controller, int pointX,
                            int pointY, KeyboardActionListener listener);
 

@@ -21,7 +21,7 @@ import android.util.Log;
 
 import com.emotion.chat.event.Event;
 import com.emotion.chat.latin.common.Constants;
-import com.emotion.chat.latin.utils.CapsModeUtils;
+import com.emotion.chat.latin.utils.CapsUtils;
 import com.emotion.chat.latin.utils.RecapitalizeStatus;
 
 /**
@@ -41,37 +41,12 @@ public final class KeyboardState {
     private static final boolean DEBUG_EVENT = false;
     private static final boolean DEBUG_INTERNAL_ACTION = false;
 
-    public interface SwitchActions {
-        boolean DEBUG_ACTION = false;
-
-        void setAlphabetKeyboard();
-        void setAlphabetManualShiftedKeyboard();
-        void setAlphabetAutomaticShiftedKeyboard();
-        void setAlphabetShiftLockedKeyboard();
-        void setAlphabetShiftLockShiftedKeyboard();
-        void setSymbolsKeyboard();
-        void setSymbolsShiftedKeyboard();
-
-        /**
-         * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
-         */
-        void requestUpdatingShiftState(final int autoCapsFlags, final int recapitalizeMode);
-
-        boolean DEBUG_TIMER_ACTION = false;
-
-        void startDoubleTapShiftKeyTimer();
-        boolean isInDoubleTapShiftKeyTimeout();
-        void cancelDoubleTapShiftKeyTimer();
-    }
+    private final ShiftKeyState mShiftKeyState = new ShiftKeyState("Shift");
 
     private final SwitchActions mSwitchActions;
+    private final ModifierKeyState mSymbolKeyState = new ModifierKeyState("Symbol");
+    private final AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
 
-    private ShiftKeyState mShiftKeyState = new ShiftKeyState("Shift");
-    private ModifierKeyState mSymbolKeyState = new ModifierKeyState("Symbol");
-
-    // TODO: Merge {@link #mSwitchState}, {@link #mIsAlphabetMode}, {@link #mAlphabetShiftState},
-    // {@link #mIsSymbolShifted}, {@link #mPrevMainKeyboardWasShiftLocked}, and
-    // {@link #mPrevSymbolsKeyboardWasShifted} into single state variable.
     private static final int SWITCH_STATE_ALPHA = 0;
     private static final int SWITCH_STATE_SYMBOL_BEGIN = 1;
     private static final int SWITCH_STATE_SYMBOL = 2;
@@ -81,7 +56,12 @@ public final class KeyboardState {
     private int mSwitchState = SWITCH_STATE_ALPHA;
 
     private boolean mIsAlphabetMode;
-    private AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
+
+    private String stateToString(final int autoCapsFlags, final int recapitalizeMode) {
+        return this + " autoCapsFlags=" + CapsUtils.flagsToString(autoCapsFlags)
+                + " recapitalizeMode=" + RecapitalizeStatus.modeToString(recapitalizeMode);
+    }
+
     private boolean mIsSymbolShifted;
     private boolean mPrevMainKeyboardWasShiftLocked;
     private boolean mPrevSymbolsKeyboardWasShifted;
@@ -259,7 +239,6 @@ public final class KeyboardState {
         }
     }
 
-    // TODO: Remove this method. Come up with a more comprehensive way to reset the keyboard layout
     // when a keyboard layout set doesn't get reloaded in LatinIME.onStartInputViewInternal().
     private void resetKeyboardStateToAlphabet(final int autoCapsFlags, final int recapitalizeMode) {
         if (DEBUG_INTERNAL_ACTION) {
@@ -409,8 +388,6 @@ public final class KeyboardState {
         updateAlphabetShiftState(autoCapsFlags, recapitalizeMode);
     }
 
-    // TODO: Remove this method. Come up with a more comprehensive way to reset the keyboard layout
-    // when a keyboard layout set doesn't get reloaded in LatinIME.onStartInputViewInternal().
     public void onResetKeyboardStateToAlphabet(final int autoCapsFlags,
             final int recapitalizeMode) {
         if (DEBUG_EVENT) {
@@ -668,8 +645,34 @@ public final class KeyboardState {
                 + " switch=" + switchStateToString(mSwitchState) + "]";
     }
 
-    private String stateToString(final int autoCapsFlags, final int recapitalizeMode) {
-        return this + " autoCapsFlags=" + CapsModeUtils.flagsToString(autoCapsFlags)
-                + " recapitalizeMode=" + RecapitalizeStatus.modeToString(recapitalizeMode);
+    public interface SwitchActions {
+        boolean DEBUG_ACTION = false;
+
+        void setAlphabetKeyboard();
+
+        void setAlphabetManualShiftedKeyboard();
+
+        void setAlphabetAutomaticShiftedKeyboard();
+
+        void setAlphabetShiftLockedKeyboard();
+
+        void setAlphabetShiftLockShiftedKeyboard();
+
+        void setSymbolsKeyboard();
+
+        void setSymbolsShiftedKeyboard();
+
+        /**
+         * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
+         */
+        void requestUpdatingShiftState(final int autoCapsFlags, final int recapitalizeMode);
+
+        boolean DEBUG_TIMER_ACTION = false;
+
+        void startDoubleTapShiftKeyTimer();
+
+        boolean isInDoubleTapShiftKeyTimeout();
+
+        void cancelDoubleTapShiftKeyTimer();
     }
 }

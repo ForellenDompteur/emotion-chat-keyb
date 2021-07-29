@@ -183,8 +183,6 @@ public final class StringUtils {
         for (int index = startIndex; index < endIndex;
                 index = Character.offsetByCodePoints(charSequence, index, 1)) {
             final int codePoint = Character.codePointAt(charSequence, index);
-            // TODO: stop using this, as it's not aware of the locale and does not always do
-            // the right thing.
             destination[destIndex] = downCase ? Character.toLowerCase(codePoint) : codePoint;
             destIndex++;
         }
@@ -241,8 +239,6 @@ public final class StringUtils {
         return true;
     }
 
-    // TODO: like capitalizeFirst*, this does not work perfectly for Dutch because of the IJ digraph
-    // which should be capitalized together in *some* cases.
     public static String capitalizeEachWord(final String text,
             final int[] sortedSeparators, final Locale locale) {
         final StringBuilder builder = new StringBuilder();

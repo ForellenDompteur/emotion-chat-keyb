@@ -20,13 +20,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
-import java.util.Locale;
-
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.utils.RunInLocale;
 import com.emotion.chat.latin.utils.SubtypeLocaleUtils;
 
-// TODO: Make this an immutable class.
+import java.util.Locale;
+
 public final class KeyboardTextsSet {
     public static final String PREFIX_TEXT = "!text/";
     private static final String PREFIX_RESOURCE = "!string/";
@@ -73,7 +72,6 @@ public final class KeyboardTextsSet {
         return size;
     }
 
-    // TODO: Resolve text reference when creating {@link KeyboardTextsTable} class.
     public String resolveTextReference(final String rawText) {
         if (TextUtils.isEmpty(rawText)) {
             return null;

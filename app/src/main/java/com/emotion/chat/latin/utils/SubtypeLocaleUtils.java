@@ -21,12 +21,12 @@ import android.content.res.Resources;
 import android.util.Log;
 import android.view.inputmethod.InputMethodSubtype;
 
-import java.util.HashMap;
-import java.util.Locale;
-
 import com.emotion.chat.R;
 import com.emotion.chat.latin.common.LocaleUtils;
 import com.emotion.chat.latin.common.StringUtils;
+
+import java.util.HashMap;
+import java.util.Locale;
 
 import static com.emotion.chat.latin.common.Constants.Subtype.ExtraValue.KEYBOARD_LAYOUT_SET;
 import static com.emotion.chat.latin.common.Constants.Subtype.ExtraValue.UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME;
@@ -34,7 +34,6 @@ import static com.emotion.chat.latin.common.Constants.Subtype.ExtraValue.UNTRANS
 /**
  * A helper class to deal with subtype locales.
   */
-// TODO: consolidate this into RichInputMethodSubtype
 public final class SubtypeLocaleUtils {
     static final String TAG = SubtypeLocaleUtils.class.getSimpleName();
 
@@ -268,7 +267,6 @@ public final class SubtypeLocaleUtils {
     private static String getSubtypeDisplayNameInternal(final InputMethodSubtype subtype,
             final Locale displayLocale) {
         final String replacementString = getReplacementString(subtype, displayLocale);
-        // TODO: rework this for multi-lingual subtypes
         final int nameResId = subtype.getNameResId();
         final RunInLocale<String> getSubtypeName = new RunInLocale<String>() {
             @Override
@@ -276,8 +274,6 @@ public final class SubtypeLocaleUtils {
                 try {
                     return res.getString(nameResId, replacementString);
                 } catch (Resources.NotFoundException e) {
-                    // TODO: Remove this catch when InputMethodManager.getCurrentInputMethodSubtype
-                    // is fixed.
                     Log.w(TAG, "Unknown subtype: mode=" + subtype.getMode()
                             + " nameResId=" + subtype.getNameResId()
                             + " locale=" + subtype.getLocale()
@@ -309,14 +305,9 @@ public final class SubtypeLocaleUtils {
     public static String getKeyboardLayoutSetName(final InputMethodSubtype subtype) {
         String keyboardLayoutSet = subtype.getExtraValueOf(KEYBOARD_LAYOUT_SET);
         if (keyboardLayoutSet == null) {
-            // This subtype doesn't have a keyboardLayoutSet extra value, so lookup its keyboard
-            // layout set in sLocaleAndExtraValueToKeyboardLayoutSetMap to keep it compatible with
-            // pre-JellyBean.
             final String key = subtype.getLocale() + ":" + subtype.getExtraValue();
             keyboardLayoutSet = sLocaleAndExtraValueToKeyboardLayoutSetMap.get(key);
         }
-        // TODO: Remove this null check when InputMethodManager.getCurrentInputMethodSubtype is
-        // fixed.
         if (keyboardLayoutSet == null) {
             android.util.Log.w(TAG, "KeyboardLayoutSet not found, use QWERTY: " +
                     "locale=" + subtype.getLocale() + " extraValue=" + subtype.getExtraValue());

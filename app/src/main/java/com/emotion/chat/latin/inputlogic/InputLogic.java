@@ -18,15 +18,13 @@ package com.emotion.chat.latin.inputlogic;
 
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 
-import java.util.TreeSet;
-
 import com.emotion.chat.event.Event;
 import com.emotion.chat.event.InputTransaction;
-import com.emotion.chat.event.TimerSingleton;
 import com.emotion.chat.latin.LatinIME;
 import com.emotion.chat.latin.RichInputConnection;
 import com.emotion.chat.latin.common.Constants;
@@ -37,19 +35,12 @@ import com.emotion.chat.latin.utils.RecapitalizeStatus;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import android.util.Log;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TreeSet;
 
-import static com.emotion.chat.keyboard.MainKeyboardView.sensorData;
-
-
-/**
- * This class manages the input logic.
- */
 public final class InputLogic {
-    // TODO : Remove this member when we can.
     final LatinIME mLatinIME;
 
     // This has package visibility so it can be accessed from InputLogicHandler.
@@ -170,9 +161,6 @@ public final class InputLogic {
      * @param event The event to handle.
      */
     private void handleConsumedEvent(final Event event) {
-        // A consumed event may have text to commit and an update to the composing state, so
-        // we evaluate both. With some combiners, it's possible than an event contains both
-        // and we enter both of the following if clauses.
         final CharSequence textToCommit = event.getTextToCommit();
         if (!TextUtils.isEmpty(textToCommit)) {
             mConnection.commitText(textToCommit, 1);
@@ -193,43 +181,14 @@ public final class InputLogic {
             FileOutputStream keyboardFOut = new FileOutputStream(outfile,true);
             keyboardFOut.write(fileContents.getBytes());
 
-//            Log.d("INPUTLOGIC", fileContents);
-//            String dataCollected = "";
-//            if (fileContents.equals(" ")) {
-//                Log.d("ENTER", "YOU PRESSED ENTER");
-//                dataCollected = "[WPM: " + TimerSingleton.getElapsedTime() + "," +
-//                        "Touch Size: " + sensorData.getSize() + "," +
-//                        "Brightness: " + sensorData.getBrightness() + "]\n";
-//                keyboardFOut.write(dataCollected.getBytes());
-//            }
             keyboardFOut.close();
 
             Log.d("INFO", "written");
 
 
 
-
-            // If you want to save files directly in the internal storage outside the
-            // Android > data > com.emotion.chat
-            // folder, use the commented out implementation below.
-            // For this, you should add the read/write permissions in the manifest and a permission
-            // checking mechanism that activates on launch of the setup and the settings activities.
-
-            /*
-
-            String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-
-
-            File outfile = new File(storagePath+File.separator+fileName);
-            FileOutputStream keyboardFOS = new FileOutputStream(outfile,true);
-            keyboardFOS.write(fileContents.getBytes());
-            keyboardFOS.close();
-
-            */
         }
         catch (Exception e) {
-            // TODO Auto-generated catch block
-
             Log.d("ERROR" , "Something went wrong");
         }
 
@@ -452,14 +411,7 @@ public final class InputLogic {
             } else {
                 final int codePointBeforeCursor = mConnection.getCodePointBeforeCursor();
                 if (codePointBeforeCursor == Constants.NOT_A_CODE) {
-                    // HACK for backward compatibility with broken apps that haven't realized
-                    // yet that hardware keyboards are not the only way of inputting text.
-                    // Nothing to delete before the cursor. We should not do anything, but many
-                    // broken apps expect something to happen in this case so that they can
-                    // catch it and have their broken interface react. If you need the keyboard
-                    // to do this, you're doing it wrong -- please fix your app.
                     mConnection.deleteTextBeforeCursor(1);
-                    // TODO: Add a new StatsUtils method onBackspaceWhenNoText()
                     return;
                 }
                 final int lengthToDelete =
@@ -602,7 +554,6 @@ public final class InputLogic {
      * @param newSelStart the new selection start, in java characters.
      * @param newSelEnd the new selection end, in java characters.
      */
-    // TODO: how is this different from startInput ?!
     private void resetEntireInputState(final int newSelStart, final int newSelEnd) {
         mConnection.resetCachesUponCursorMoveAndReturnSuccess(newSelStart, newSelEnd);
     }

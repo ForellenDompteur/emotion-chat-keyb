@@ -22,27 +22,6 @@ import com.emotion.chat.latin.common.StringUtils;
 import static com.emotion.chat.latin.common.Constants.CODE_OUTPUT_TEXT;
 import static com.emotion.chat.latin.common.Constants.CODE_UNSPECIFIED;
 
-/**
- * The string parser of the key specification.
- *
- * Each key specification is one of the following:
- * - Label optionally followed by keyOutputText (keyLabel|keyOutputText).
- * - Label optionally followed by code point (keyLabel|!code/code_name).
- * - Icon followed by keyOutputText (!icon/icon_name|keyOutputText).
- * - Icon followed by code point (!icon/icon_name|!code/code_name).
- * Label and keyOutputText are one of the following:
- * - Literal string.
- * - Label reference represented by (!text/label_name), see {@link KeyboardTextsSet}.
- * - String resource reference represented by (!text/resource_name), see {@link KeyboardTextsSet}.
- * Icon is represented by (!icon/icon_name), see {@link KeyboardIconsSet}.
- * Code is one of the following:
- * - Code point presented by hexadecimal string prefixed with "0x"
- * - Code reference represented by (!code/code_name), see {@link KeyboardCodesSet}.
- * Special character, comma ',' backslash '\', and bar '|' can be escaped by '\' character.
- * Note that the '\' is also parsed by XML parser and {@link MoreKeySpec#splitKeySpecs(String)}
- * as well.
- */
-// TODO: Rename to KeySpec and make this class to the key specification object.
 public final class KeySpecParser {
     // Constants for parsing.
     private static final char BACKSLASH = Constants.CODE_BACKSLASH;
@@ -130,7 +109,6 @@ public final class KeySpecParser {
 
     public static String getLabel(final String keySpec) {
         if (keySpec == null) {
-            // TODO: Throw {@link KeySpecParserError} once Key.keyLabel attribute becomes mandatory.
             return null;
         }
         if (hasIcon(keySpec)) {
@@ -154,7 +132,6 @@ public final class KeySpecParser {
 
     public static String getOutputText(final String keySpec) {
         if (keySpec == null) {
-            // TODO: Throw {@link KeySpecParserError} once Key.keyLabel attribute becomes mandatory.
             return null;
         }
         final int labelEnd = indexOfLabelEnd(keySpec);
@@ -183,7 +160,6 @@ public final class KeySpecParser {
 
     public static int getCode(final String keySpec) {
         if (keySpec == null) {
-            // TODO: Throw {@link KeySpecParserError} once Key.keyLabel attribute becomes mandatory.
             return CODE_UNSPECIFIED;
         }
         final int labelEnd = indexOfLabelEnd(keySpec);
@@ -225,7 +201,6 @@ public final class KeySpecParser {
 
     public static int getIconId(final String keySpec) {
         if (keySpec == null) {
-            // TODO: Throw {@link KeySpecParserError} once Key.keyLabel attribute becomes mandatory.
             return KeyboardIconsSet.ICON_UNDEFINED;
         }
         if (!hasIcon(keySpec)) {

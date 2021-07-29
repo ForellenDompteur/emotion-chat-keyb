@@ -106,8 +106,6 @@
     zu: Zulu/qwerty
     zz: QWERTY/qwerty
     -->
-<!-- TODO: use <lang>_keyboard icon instead of a common keyboard icon. -->
-<!-- TODO: Remove "AsciiCapable" from the extra values when we can stop supporting JB-MR1 -->
 <!-- Note: SupportTouchPositionCorrection extra value is obsolete and maintained for backward
      compatibility. -->
 <!-- If IME doesn't have an applicable subtype, the first subtype will be used as a default
@@ -637,8 +635,6 @@
             android:imeSubtypeExtraValue="KeyboardLayoutSet=south_slavic"
             android:isAsciiCapable="false"
     />
-    <!-- TODO: This Serbian Latin keyboard is a preliminary layout.
-               This isn't based on the final specification. -->
     <subtype android:icon="@drawable/ic_ime_switcher_dark"
             android:label="@string/subtype_sr_ZZ"
             android:subtypeId="0xf4a5569c"
@@ -726,8 +722,6 @@
         android:imeSubtypeExtraValue="KeyboardLayoutSet=urdu"
         android:isAsciiCapable="false"
     />
-    <!-- TODO: This Uzbek keyboard is a preliminary layout.
-               This isn't based on the final specification. -->
     <subtype android:icon="@drawable/ic_ime_switcher_dark"
             android:label="@string/subtype_generic"
             android:subtypeId="0xad5cf7f6"

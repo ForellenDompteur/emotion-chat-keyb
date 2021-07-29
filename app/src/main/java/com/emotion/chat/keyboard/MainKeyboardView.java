@@ -30,11 +30,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.WeakHashMap;
 
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.internal.DrawingPreviewPlacerView;
@@ -53,6 +50,8 @@ import com.emotion.chat.latin.common.CoordinateUtils;
 import com.emotion.chat.latin.inputlogic.SensorData;
 import com.emotion.chat.latin.utils.LanguageOnSpacebarUtils;
 import com.emotion.chat.latin.utils.TypefaceUtils;
+
+import java.util.WeakHashMap;
 
 /**
  * A view that is responsible for detecting key presses and touch movements.
@@ -107,7 +106,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     private Key mSpaceKey;
     // Stuff to draw language name on spacebar.
     private final int mLanguageOnSpacebarFinalAlpha;
-    private ObjectAnimator mLanguageOnSpacebarFadeoutAnimator;
+    private final ObjectAnimator mLanguageOnSpacebarFadeoutAnimator;
     private int mLanguageOnSpacebarFormatType;
     private int mLanguageOnSpacebarAnimAlpha = Constants.Color.ALPHA_OPAQUE;
     private final float mLanguageOnSpacebarTextRatio;
@@ -119,7 +118,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     // Stuff to draw altCodeWhileTyping keys.
     private final ObjectAnimator mAltCodeKeyWhileTypingFadeoutAnimator;
     private final ObjectAnimator mAltCodeKeyWhileTypingFadeinAnimator;
-    private int mAltCodeKeyWhileTypingAnimAlpha = Constants.Color.ALPHA_OPAQUE;
+    private final int mAltCodeKeyWhileTypingAnimAlpha = Constants.Color.ALPHA_OPAQUE;
 
     // Drawing preview placer view
     private final DrawingPreviewPlacerView mDrawingPreviewPlacerView;
@@ -221,7 +220,6 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
 
     private ObjectAnimator loadObjectAnimator(final int resId, final Object target) {
         if (resId == 0) {
-            // TODO: Stop returning null.
             return null;
         }
         final ObjectAnimator animator = (ObjectAnimator)AnimatorInflater.loadAnimator(
@@ -235,7 +233,6 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
     private static void cancelAndStartAnimators(final ObjectAnimator animatorToCancel,
             final ObjectAnimator animatorToStart) {
         if (animatorToCancel == null || animatorToStart == null) {
-            // TODO: Stop using null as a no-operation animator.
             return;
         }
         float startFraction = 0.0f;
@@ -278,14 +275,10 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
         PointerTracker.setKeyboardActionListener(listener);
     }
 
-    // TODO: We should reconsider which coordinate system should be used to represent keyboard
-    // event.
     public int getKeyX(final int x) {
         return Constants.isValidCoordinate(x) ? mKeyDetector.getTouchX(x) : x;
     }
 
-    // TODO: We should reconsider which coordinate system should be used to represent keyboard
-    // event.
     public int getKeyY(final int y) {
         return Constants.isValidCoordinate(y) ? mKeyDetector.getTouchY(y) : y;
     }
@@ -395,7 +388,6 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
             mKeyPreviewChoreographer.dismissKeyPreview(key, true /* withAnimation */);
             return;
         }
-        // TODO: Implement preference option to control key preview method and duration.
         mTimerHandler.postDismissKeyPreview(key, mKeyPreviewDrawParams.getLingerTimeout());
     }
 

@@ -105,8 +105,6 @@ public final class Constants {
          * {@link android.text.TextUtils#CAP_MODE_WORDS}, and
          * {@link android.text.TextUtils#CAP_MODE_SENTENCES}.
          */
-        // TODO: Straighten this out. It's bizarre to have to use android.text.TextUtils.CAP_MODE_*
-        // except for OFF that is in Constants.TextUtils.
         public static final int CAP_MODE_OFF = 0;
 
         private TextUtils() {
@@ -116,7 +114,6 @@ public final class Constants {
 
     public static final int NOT_A_CODE = -1;
     public static final int NOT_A_CURSOR_POSITION = -1;
-    // TODO: replace the following constants with state in InputTransaction?
     public static final int NOT_A_COORDINATE = -1;
 
     // A hint on how many characters to cache from the TextView. A good value of this is given by

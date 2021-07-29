@@ -11,3 +11,6 @@
 - touch pressure
 - typing speed (velocity)
 - error rate
+
+# 
+https://android.googlesource.com/platform/packages/inputmethods/LatinIME/+/master/java/src/com/android/inputmethod/keyboard

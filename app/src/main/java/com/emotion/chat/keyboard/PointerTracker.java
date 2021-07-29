@@ -20,12 +20,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
-
-import java.util.ArrayList;
 
 import com.emotion.chat.R;
-import com.emotion.chat.keyboard.internal.BogusMoveEventDetector;
+import com.emotion.chat.keyboard.internal.BogusMovementDetector;
 import com.emotion.chat.keyboard.internal.DrawingProxy;
 import com.emotion.chat.keyboard.internal.PointerTrackerQueue;
 import com.emotion.chat.keyboard.internal.TimerProxy;
@@ -34,12 +31,14 @@ import com.emotion.chat.latin.common.CoordinateUtils;
 import com.emotion.chat.latin.define.DebugFlags;
 import com.emotion.chat.latin.settings.Settings;
 
+import java.util.ArrayList;
+
 public final class PointerTracker implements PointerTrackerQueue.Element {
     private static final String TAG = PointerTracker.class.getSimpleName();
     private static final boolean DEBUG_EVENT = false;
     private static final boolean DEBUG_MOVE_EVENT = false;
     private static final boolean DEBUG_LISTENER = false;
-    private static boolean DEBUG_MODE = DebugFlags.DEBUG_ENABLED || DEBUG_EVENT;
+    private static final boolean DEBUG_MODE = DebugFlags.DEBUG_ENABLED || DEBUG_EVENT;
 
     static final class PointerTrackerParams {
         public final boolean mKeySelectionByDraggingFinger;
@@ -67,7 +66,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
 
     // Parameters for pointer handling.
     private static PointerTrackerParams sParams;
-    private static int sPointerStep = (int)(10.0 * Resources.getSystem().getDisplayMetrics().density);
+    private static final int sPointerStep = (int) (10.0 * Resources.getSystem().getDisplayMetrics().density);
 
     private static final ArrayList<PointerTracker> sTrackers = new ArrayList<>();
     private static final PointerTrackerQueue sPointerTrackerQueue = new PointerTrackerQueue();
@@ -82,10 +81,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
     // when new {@link Keyboard} is set by {@link #setKeyDetector(KeyDetector)}.
     private KeyDetector mKeyDetector = new KeyDetector();
     private Keyboard mKeyboard;
-    private final BogusMoveEventDetector mBogusMoveEventDetector = new BogusMoveEventDetector();
+    private final BogusMovementDetector mBogusMovementDetector = new BogusMovementDetector();
 
     // The position and time at which first down event occurred.
-    private int[] mDownCoordinates = CoordinateUtils.newInstance();
+    private final int[] mDownCoordinates = CoordinateUtils.newInstance();
 
     // The current key where this pointer is.
     private Key mCurrentKey = null;
@@ -122,13 +121,12 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
     // true if dragging finger is allowed.
     private boolean mIsAllowedDraggingFinger;
 
-    // TODO: Add PointerTrackerFactory singleton and move some class static methods into it.
     public static void init(final TypedArray mainKeyboardViewAttr, final TimerProxy timerProxy,
             final DrawingProxy drawingProxy) {
         sParams = new PointerTrackerParams(mainKeyboardViewAttr);
 
         final Resources res = mainKeyboardViewAttr.getResources();
-        BogusMoveEventDetector.init(res);
+        BogusMovementDetector.init(res);
 
         sTimerProxy = timerProxy;
         sDrawingProxy = drawingProxy;
@@ -291,7 +289,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
         // Keep {@link #mCurrentKey} that comes from previous keyboard. The key preview of
         // {@link #mCurrentKey} will be dismissed by {@setReleasedKeyGraphics(Key)} via
         // {@link onMoveEventInternal(int,int,long)} or {@link #onUpEventInternal(int,int,long)}.
-        mBogusMoveEventDetector.setKeyboardGeometry(keyWidth, keyHeight);
+        mBogusMovementDetector.setKeyboardGeometry(keyWidth, keyHeight);
     }
 
     @Override
@@ -383,7 +381,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
 
     private Key onDownKey(final int x, final int y) {
         CoordinateUtils.set(mDownCoordinates, x, y);
-        mBogusMoveEventDetector.onDownKey();
+        mBogusMovementDetector.onDownKey();
         return onMoveToNewKey(onMoveKeyInternal(x, y), x, y);
     }
 
@@ -392,7 +390,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
     }
 
     private Key onMoveKeyInternal(final int x, final int y) {
-        mBogusMoveEventDetector.onMoveKey(getDistance(x, y, mLastX, mLastY));
+        mBogusMovementDetector.onMoveKey(getDistance(x, y, mLastX, mLastY));
         mLastX = x;
         mLastY = y;
         return mKeyDetector.detectHitKey(x, y);
@@ -478,7 +476,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
         }
 
         final Key key = getKeyOn(x, y);
-        mBogusMoveEventDetector.onActualDownEvent(x, y);
+        mBogusMovementDetector.onActualDownEvent(x, y);
         if (key != null && key.isModifier()) {
             // Before processing a down event of modifier key, all pointers already being
             // tracked should be released.
@@ -824,21 +822,21 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
         final int distanceFromKeyEdgeSquared = curKey.squaredDistanceToEdge(x, y);
         if (distanceFromKeyEdgeSquared >= keyHysteresisDistanceSquared) {
             if (DEBUG_MODE) {
-                final float distanceToEdgeRatio = (float)Math.sqrt(distanceFromKeyEdgeSquared)
+                final float distanceToEdgeRatio = (float) Math.sqrt(distanceFromKeyEdgeSquared)
                         / mKeyboard.mMostCommonKeyWidth;
                 Log.d(TAG, String.format("[%d] isMajorEnoughMoveToBeOnNewKey:"
-                        +" %.2f key width from key edge", mPointerId, distanceToEdgeRatio));
+                        + " %.2f key width from key edge", mPointerId, distanceToEdgeRatio));
             }
             return true;
         }
-        if (!mIsAllowedDraggingFinger && mBogusMoveEventDetector.hasTraveledLongDistance(x, y)) {
+        if (!mIsAllowedDraggingFinger && mBogusMovementDetector.hasTraveledLongDistance(x, y)) {
             if (DEBUG_MODE) {
-                final float keyDiagonal = (float)Math.hypot(
+                final float keyDiagonal = (float) Math.hypot(
                         mKeyboard.mMostCommonKeyWidth, mKeyboard.mMostCommonKeyHeight);
                 final float lengthFromDownRatio =
-                        mBogusMoveEventDetector.getAccumulatedDistanceFromDownKey() / keyDiagonal;
+                        mBogusMovementDetector.getAccumulatedDistanceFromDownKey() / keyDiagonal;
                 Log.d(TAG, String.format("[%d] isMajorEnoughMoveToBeOnNewKey:"
-                        + " %.2f key diagonal from virtual down point",
+                                + " %.2f key diagonal from virtual down point",
                         mPointerId, lengthFromDownRatio));
             }
             return true;

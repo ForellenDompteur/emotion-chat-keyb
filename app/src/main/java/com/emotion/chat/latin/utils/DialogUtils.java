@@ -23,7 +23,7 @@ import com.emotion.chat.R;
 
 public final class DialogUtils {
     private DialogUtils() {
-        // This utility class is not publicly instantiable.
+        // Utility class, not publicly instantiable
     }
 
     public static Context getPlatformDialogThemeContext(final Context context) {

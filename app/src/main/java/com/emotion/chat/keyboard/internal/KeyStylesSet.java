@@ -20,14 +20,14 @@ import android.content.res.TypedArray;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.emotion.chat.R;
+import com.emotion.chat.latin.utils.XmlParseUtils;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.util.Arrays;
 import java.util.HashMap;
-
-import com.emotion.chat.R;
-import com.emotion.chat.latin.utils.XmlParseUtils;
 
 public final class KeyStylesSet {
     private static final String TAG = KeyStylesSet.class.getSimpleName();
@@ -134,7 +134,6 @@ public final class KeyStylesSet {
         }
 
         public void readKeyAttributes(final TypedArray keyAttr) {
-            // TODO: Currently not all Key attributes can be declared as style.
             readString(keyAttr, R.styleable.Keyboard_Key_altCode);
             readString(keyAttr, R.styleable.Keyboard_Key_keySpec);
             readString(keyAttr, R.styleable.Keyboard_Key_keyHintLabel);

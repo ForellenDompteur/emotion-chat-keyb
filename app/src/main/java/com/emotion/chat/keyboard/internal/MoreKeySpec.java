@@ -19,27 +19,15 @@ package com.emotion.chat.keyboard.internal;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Locale;
-
 import com.emotion.chat.keyboard.Key;
 import com.emotion.chat.latin.common.CollectionUtils;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.common.StringUtils;
 
-/**
- * The more key specification object. The more keys are an array of {@link MoreKeySpec}.
- *
- * The more keys specification is comma separated "key specification" each of which represents one
- * "more key".
- * The key specification might have label or string resource reference in it. These references are
- * expanded before parsing comma.
- * Special character, comma ',' backslash '\' can be escaped by '\' character.
- * Note that the '\' is also parsed by XML parser and {@link MoreKeySpec#splitKeySpecs(String)}
- * as well.
- */
-// TODO: Should extend the key specification object.
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
+
 public final class MoreKeySpec {
     public final int mCode;
     public final String mLabel;
@@ -47,7 +35,7 @@ public final class MoreKeySpec {
     public final int mIconId;
 
     public MoreKeySpec(final String moreKeySpec, boolean needsToUpperCase,
-            final Locale locale) {
+                       final Locale locale) {
         if (moreKeySpec.isEmpty()) {
             throw new KeySpecParser.KeySpecParserError("Empty more key spec");
         }
@@ -132,10 +120,8 @@ public final class MoreKeySpec {
             final int code = moreKey.mCode;
             if (Character.isAlphabetic(code) && mCodes.indexOfKey(code) >= 0) {
                 return true;
-            } else if (code == Constants.CODE_OUTPUT_TEXT && mTexts.contains(moreKey.mOutputText)) {
-                return true;
-            }
-            return false;
+            } else
+                return code == Constants.CODE_OUTPUT_TEXT && mTexts.contains(moreKey.mOutputText);
         }
     }
 

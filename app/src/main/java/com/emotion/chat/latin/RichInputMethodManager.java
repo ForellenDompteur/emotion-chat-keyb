@@ -28,17 +28,17 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
+import com.emotion.chat.compat.InputMethodCompatUtils;
+import com.emotion.chat.latin.settings.Settings;
+import com.emotion.chat.latin.utils.AdditionalSubtypeUtils;
+import com.emotion.chat.latin.utils.LanguageOnSpacebarUtils;
+import com.emotion.chat.latin.utils.SubtypeLocaleUtils;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import com.emotion.chat.compat.InputMethodSubtypeCompatUtils;
-import com.emotion.chat.latin.settings.Settings;
-import com.emotion.chat.latin.utils.AdditionalSubtypeUtils;
-import com.emotion.chat.latin.utils.LanguageOnSpacebarUtils;
-import com.emotion.chat.latin.utils.SubtypeLocaleUtils;
 
 import static com.emotion.chat.latin.common.Constants.Subtype.KEYBOARD_MODE;
 
@@ -331,7 +331,7 @@ public class RichInputMethodManager {
         }
     }
 
-    private static RichInputMethodSubtype sForcedSubtypeForTesting = null;
+    private static final RichInputMethodSubtype sForcedSubtypeForTesting = null;
 
     public Locale getCurrentSubtypeLocale() {
         if (null != sForcedSubtypeForTesting) {
@@ -422,21 +422,19 @@ public class RichInputMethodManager {
     }
 
     public InputMethodSubtype findSubtypeByLocale(final Locale locale) {
-        // Find the best subtype based on a straightforward matching algorithm.
-        // TODO: Use LocaleList#getFirstMatch() instead.
         final List<InputMethodSubtype> subtypes =
                 getMyEnabledInputMethodSubtypeList(true /* allowsImplicitlySelectedSubtypes */);
         final int count = subtypes.size();
         for (int i = 0; i < count; ++i) {
             final InputMethodSubtype subtype = subtypes.get(i);
-            final Locale subtypeLocale = InputMethodSubtypeCompatUtils.getLocaleObject(subtype);
+            final Locale subtypeLocale = InputMethodCompatUtils.getLocaleObject(subtype);
             if (subtypeLocale.equals(locale)) {
                 return subtype;
             }
         }
         for (int i = 0; i < count; ++i) {
             final InputMethodSubtype subtype = subtypes.get(i);
-            final Locale subtypeLocale = InputMethodSubtypeCompatUtils.getLocaleObject(subtype);
+            final Locale subtypeLocale = InputMethodCompatUtils.getLocaleObject(subtype);
             if (subtypeLocale.getLanguage().equals(locale.getLanguage()) &&
                     subtypeLocale.getCountry().equals(locale.getCountry()) &&
                     subtypeLocale.getVariant().equals(locale.getVariant())) {
@@ -445,7 +443,7 @@ public class RichInputMethodManager {
         }
         for (int i = 0; i < count; ++i) {
             final InputMethodSubtype subtype = subtypes.get(i);
-            final Locale subtypeLocale = InputMethodSubtypeCompatUtils.getLocaleObject(subtype);
+            final Locale subtypeLocale = InputMethodCompatUtils.getLocaleObject(subtype);
             if (subtypeLocale.getLanguage().equals(locale.getLanguage()) &&
                     subtypeLocale.getCountry().equals(locale.getCountry())) {
                 return subtype;
@@ -453,7 +451,7 @@ public class RichInputMethodManager {
         }
         for (int i = 0; i < count; ++i) {
             final InputMethodSubtype subtype = subtypes.get(i);
-            final Locale subtypeLocale = InputMethodSubtypeCompatUtils.getLocaleObject(subtype);
+            final Locale subtypeLocale = InputMethodCompatUtils.getLocaleObject(subtype);
             if (subtypeLocale.getLanguage().equals(locale.getLanguage())) {
                 return subtype;
             }
@@ -517,18 +515,13 @@ public class RichInputMethodManager {
         LanguageOnSpacebarUtils.setEnabledSubtypes(getMyEnabledInputMethodSubtypeList(
                 true /* allowsImplicitlySelectedSubtypes */));
 
-        // TODO: Update an icon for shortcut IME
         final Map<InputMethodInfo, List<InputMethodSubtype>> shortcuts =
                 getInputMethodManager().getShortcutInputMethodsAndSubtypes();
         mShortcutInputMethodInfo = null;
         mShortcutSubtype = null;
         for (final InputMethodInfo imi : shortcuts.keySet()) {
             final List<InputMethodSubtype> subtypes = shortcuts.get(imi);
-            // TODO: Returns the first found IMI for now. Should handle all shortcuts as
-            // appropriate.
             mShortcutInputMethodInfo = imi;
-            // TODO: Pick up the first found subtype for now. Should handle all subtypes
-            // as appropriate.
             mShortcutSubtype = subtypes.size() > 0 ? subtypes.get(0) : null;
             break;
         }

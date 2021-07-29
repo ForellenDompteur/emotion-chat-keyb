@@ -31,7 +31,7 @@ import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.common.StringUtils;
 import com.emotion.chat.latin.common.UnicodeSurrogate;
 import com.emotion.chat.latin.settings.SpacingAndPunctuations;
-import com.emotion.chat.latin.utils.CapsModeUtils;
+import com.emotion.chat.latin.utils.CapsUtils;
 import com.emotion.chat.latin.utils.DebugLogUtils;
 
 /**
@@ -92,10 +92,10 @@ public final class RichInputConnection {
     private final StringBuilder mComposingText = new StringBuilder();
 
     /**
-     * This variable is a temporary object used in {@link #commitText(CharSequence,int)}
+     * This variable is a temporary object used in {@link #commitText(CharSequence, int)}
      * to avoid object creation.
      */
-    private SpannableStringBuilder mTempObjectForCommitText = new SpannableStringBuilder();
+    private final SpannableStringBuilder mTempObjectForCommitText = new SpannableStringBuilder();
 
     private final InputMethodService mParent;
     private InputConnection mIC;
@@ -160,7 +160,7 @@ public final class RichInputConnection {
     }
 
     public void endBatchEdit() {
-        if (mNestLevel <= 0) Log.e(TAG, "Batch edit not in progress!"); // TODO: exception instead
+        if (mNestLevel <= 0) Log.e(TAG, "Batch edit not in progress!");
         if (--mNestLevel == 0 && isConnected()) {
             mIC.endBatchEdit();
         }
@@ -224,7 +224,6 @@ public final class RichInputConnection {
 
     private void checkBatchEdit() {
         if (mNestLevel != 1) {
-            // TODO: exception instead
             Log.e(TAG, "Batch edit level incorrect : " + mNestLevel);
             Log.e(TAG, DebugLogUtils.getStackTrace(4));
         }
@@ -233,7 +232,6 @@ public final class RichInputConnection {
     public void finishComposingText() {
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
-        // TODO: this is not correct! The cursor is not necessarily after the composing text.
         // In the practice right now this is only called when input ends so it will be reset so
         // it works, but it's wrong and should be fixed.
         mCommittedTextBeforeComposingText.append(mComposingText);
@@ -253,7 +251,6 @@ public final class RichInputConnection {
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
         mCommittedTextBeforeComposingText.append(text);
-        // TODO: the following is exceedingly error-prone. Right now when the cursor is in the
         // middle of the composing word mComposingText only holds the part of the composing text
         // that is before the cursor, so this actually works, but it's terribly confusing. Fix this.
         mExpectedSelStart += text.length() - mComposingText.length();
@@ -316,22 +313,13 @@ public final class RichInputConnection {
             // We have some composing text - we should be in MODE_CHARACTERS only.
             return TextUtils.CAP_MODE_CHARACTERS & inputType;
         }
-        // TODO: this will generally work, but there may be cases where the buffer contains SOME
-        // information but not enough to determine the caps mode accurately. This may happen after
-        // heavy pressing of delete, for example DEFAULT_TEXT_CACHE_SIZE - 5 times or so.
-        // getCapsMode should be updated to be able to return a "not enough info" result so that
-        // we can get more context only when needed.
         if (TextUtils.isEmpty(mCommittedTextBeforeComposingText) && 0 != mExpectedSelStart) {
             if (!reloadTextCache()) {
                 Log.w(TAG, "Unable to connect to the editor. "
                         + "Setting caps mode without knowing text.");
             }
         }
-        // This never calls InputConnection#getCapsMode - in fact, it's a static method that
-        // never blocks or initiates IPC.
-        // TODO: don't call #toString() here. Instead, all accesses to
-        // mCommittedTextBeforeComposingText should be done on the main thread.
-        return CapsModeUtils.getCapsMode(mCommittedTextBeforeComposingText.toString(), inputType,
+        return CapsUtils.getCapsMode(mCommittedTextBeforeComposingText.toString(), inputType,
                 spacingAndPunctuations);
     }
 
@@ -393,9 +381,6 @@ public final class RichInputConnection {
 
     public void deleteTextBeforeCursor(final int beforeLength) {
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
-        // TODO: the following is incorrect if the cursor is not immediately after the composition.
-        // Right now we never come here in this case because we reset the composing state before we
-        // come here in this case, but we need to fix this.
         final int remainingChars = mComposingText.length() - beforeLength;
         if (remainingChars >= 0) {
             mComposingText.setLength(remainingChars);
@@ -456,7 +441,6 @@ public final class RichInputConnection {
                 }
 
                 if (mExpectedSelStart > 0 && mExpectedSelStart == mExpectedSelEnd) {
-                    // TODO: Handle surrogate pairs.
                     mExpectedSelStart -= 1;
                 }
                 mExpectedSelEnd = mExpectedSelStart;

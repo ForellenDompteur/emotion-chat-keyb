@@ -37,14 +37,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodSubtype;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import com.emotion.chat.R;
 import com.emotion.chat.latin.RichInputMethodManager;
 import com.emotion.chat.latin.utils.AdditionalSubtypeUtils;
 import com.emotion.chat.latin.utils.DialogUtils;
 import com.emotion.chat.latin.utils.IntentUtils;
 import com.emotion.chat.latin.utils.SubtypeLocaleUtils;
+
+import java.util.ArrayList;
 
 public final class CustomInputStyleSettingsFragment extends PreferenceFragment
         implements CustomInputStylePreference.Listener {
@@ -86,7 +86,6 @@ public final class CustomInputStyleSettingsFragment extends PreferenceFragment
         for (final InputMethodSubtype subtype : subtypes) {
             subtypeNames.add(SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(subtype));
         }
-        // TODO: A delimiter of custom input styles should be localized.
         pref.setSummary(TextUtils.join(", ", subtypeNames));
     }
 
@@ -243,9 +242,6 @@ public final class CustomInputStyleSettingsFragment extends PreferenceFragment
                                 Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        // TODO: Add newly adding subtype to extra value of the intent as a hint
-                        // for the input language selection activity.
-                        // intent.putExtra("newlyAddedSubtype", subtypePref.getSubtype());
                         startActivity(intent);
                     }
                 });

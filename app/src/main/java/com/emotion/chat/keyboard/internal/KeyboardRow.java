@@ -20,14 +20,14 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Xml;
 
-import org.xmlpull.v1.XmlPullParser;
-
-import java.util.ArrayDeque;
-
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.Key;
 import com.emotion.chat.keyboard.Keyboard;
 import com.emotion.chat.latin.utils.ResourceUtils;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.util.ArrayDeque;
 
 /**
  * Container for keys in the keyboard. All keys in a row are at the same Y-coordinate.
@@ -45,7 +45,6 @@ public final class KeyboardRow {
 
     private final ArrayDeque<RowAttributes> mRowAttributesStack = new ArrayDeque<>();
 
-    // TODO: Add keyActionFlags.
     private static class RowAttributes {
         /** Default width of a key in this row. */
         public final float mDefaultKeyWidth;

@@ -20,23 +20,23 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.inputmethod.InputMethodSubtype;
 
-import java.util.Locale;
-
 import com.emotion.chat.latin.common.LocaleUtils;
 
-public final class InputMethodSubtypeCompatUtils {
-    private InputMethodSubtypeCompatUtils() {
-        // This utility class is not publicly instantiable.
+import java.util.Locale;
+
+public final class InputMethodCompatUtils {
+    private InputMethodCompatUtils() {
+        // Utility class, not publicly instantiable
     }
 
     public static Locale getLocaleObject(final InputMethodSubtype subtype) {
-        // Locale.forLanguageTag() is available only in Android L and later.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             final String languageTag = subtype.getLanguageTag();
             if (!TextUtils.isEmpty(languageTag)) {
                 return Locale.forLanguageTag(languageTag);
             }
         }
+
         return LocaleUtils.constructLocaleFromString(subtype.getLocale());
     }
 }

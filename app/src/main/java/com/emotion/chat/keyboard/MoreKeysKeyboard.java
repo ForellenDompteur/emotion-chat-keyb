@@ -269,8 +269,6 @@ public final class MoreKeysKeyboard extends Keyboard {
             super(context, new MoreKeysKeyboardParams());
             load(keyboard.mMoreKeysTemplate, keyboard.mId);
 
-            // TODO: More keys keyboard's vertical gap is currently calculated heuristically.
-            // Should revise the algorithm.
             mParams.mVerticalGap = keyboard.mVerticalGap / 2;
             // This {@link MoreKeysKeyboard} is invoked from the <code>key</code>.
             mParentKey = key;

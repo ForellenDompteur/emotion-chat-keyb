@@ -27,13 +27,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.util.Xml;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Locale;
-
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.Key;
 import com.emotion.chat.keyboard.Keyboard;
@@ -45,77 +38,13 @@ import com.emotion.chat.latin.utils.ResourceUtils;
 import com.emotion.chat.latin.utils.XmlParseUtils;
 import com.emotion.chat.latin.utils.XmlParseUtils.ParseException;
 
-/**
- * Keyboard Building helper.
- *
- * This class parses Keyboard XML file and eventually build a Keyboard.
- * The Keyboard XML file looks like:
- * <pre>
- *   &lt;!-- xml/keyboard.xml --&gt;
- *   &lt;Keyboard keyboard_attributes*&gt;
- *     &lt;!-- Keyboard Content --&gt;
- *     &lt;Row row_attributes*&gt;
- *       &lt;!-- Row Content --&gt;
- *       &lt;Key key_attributes* /&gt;
- *       &lt;Spacer horizontalGap="32.0dp" /&gt;
- *       &lt;include keyboardLayout="@xml/other_keys"&gt;
- *       ...
- *     &lt;/Row&gt;
- *     &lt;include keyboardLayout="@xml/other_rows"&gt;
- *     ...
- *   &lt;/Keyboard&gt;
- * </pre>
- * The XML file which is included in other file must have &lt;merge&gt; as root element,
- * such as:
- * <pre>
- *   &lt;!-- xml/other_keys.xml --&gt;
- *   &lt;merge&gt;
- *     &lt;Key key_attributes* /&gt;
- *     ...
- *   &lt;/merge&gt;
- * </pre>
- * and
- * <pre>
- *   &lt;!-- xml/other_rows.xml --&gt;
- *   &lt;merge&gt;
- *     &lt;Row row_attributes*&gt;
- *       &lt;Key key_attributes* /&gt;
- *     &lt;/Row&gt;
- *     ...
- *   &lt;/merge&gt;
- * </pre>
- * You can also use switch-case-default tags to select Rows and Keys.
- * <pre>
- *   &lt;switch&gt;
- *     &lt;case case_attribute*&gt;
- *       &lt;!-- Any valid tags at switch position --&gt;
- *     &lt;/case&gt;
- *     ...
- *     &lt;default&gt;
- *       &lt;!-- Any valid tags at switch position --&gt;
- *     &lt;/default&gt;
- *   &lt;/switch&gt;
- * </pre>
- * You can declare Key style and specify styles within Key tags.
- * <pre>
- *     &lt;switch&gt;
- *       &lt;case mode="email"&gt;
- *         &lt;key-style styleName="f1-key" parentStyle="modifier-key"
- *           keyLabel=".com"
- *         /&gt;
- *       &lt;/case&gt;
- *       &lt;case mode="url"&gt;
- *         &lt;key-style styleName="f1-key" parentStyle="modifier-key"
- *           keyLabel="http://"
- *         /&gt;
- *       &lt;/case&gt;
- *     &lt;/switch&gt;
- *     ...
- *     &lt;Key keyStyle="shift-key" ... /&gt;
- * </pre>
- */
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
-// TODO: Write unit tests for this class.
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Locale;
+
 public class KeyboardBuilder<KP extends KeyboardParams> {
     private static final String BUILDER_TAG = "Keyboard.Builder";
     private static final boolean DEBUG = false;
@@ -247,7 +176,6 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
                     baseWidth, baseWidth, baseWidth / DEFAULT_KEYBOARD_COLUMNS);
             params.mHorizontalGap = (int)keyboardAttr.getFraction(
                     R.styleable.Keyboard_horizontalGap, baseWidth, baseWidth, 0);
-            // TODO: Fix keyboard geometry calculation clearer. Historically vertical gap between
             // rows are determined based on the entire keyboard height including top and bottom
             // paddings.
             params.mVerticalGap = (int)keyboardAttr.getFraction(
@@ -418,7 +346,6 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
                             CodesArrayParser.getMinSupportSdkVersion(codeArraySpec);
                 } else {
                     final String textArraySpec = array[i];
-                    // TODO: Utilize KeySpecParser or write more generic TextsArrayParser.
                     label = textArraySpec;
                     code = Constants.CODE_OUTPUT_TEXT;
                     outputText = textArraySpec + (char)Constants.CODE_SPACE;
@@ -428,7 +355,6 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
                     continue;
                 }
                 final int labelFlags = row.getDefaultKeyLabelFlags();
-                // TODO: Should be able to assign default keyActionFlags as well.
                 final int backgroundType = row.getDefaultBackgroundType();
                 final int x = (int)row.getKeyX(null);
                 final int y = row.getKeyY();

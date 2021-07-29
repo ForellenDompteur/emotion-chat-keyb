@@ -26,9 +26,9 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import java.util.HashSet;
-
 import com.emotion.chat.keyboard.Key;
+
+import java.util.HashSet;
 
 /**
  * The pop up key preview view.
@@ -60,7 +60,6 @@ public class KeyPreviewView extends TextView {
         setTextColor(drawParams.mPreviewTextColor);
         setTextSize(TypedValue.COMPLEX_UNIT_PX, key.selectPreviewTextSize(drawParams));
         setTypeface(key.selectPreviewTypeface(drawParams));
-        // TODO Should take care of temporaryShiftLabel here.
         setTextAndScaleX(key.getPreviewLabel());
     }
 
@@ -70,7 +69,6 @@ public class KeyPreviewView extends TextView {
         if (sNoScaleXTextSet.contains(text)) {
             return;
         }
-        // TODO: Override {@link #setBackground(Drawable)} that is supported from API 16 and
         // calculate maximum text width.
         final Drawable background = getBackground();
         if (background == null) {

@@ -32,12 +32,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
-import java.util.TreeSet;
-
 import com.emotion.chat.R;
 import com.emotion.chat.latin.RichInputMethodManager;
 import com.emotion.chat.latin.utils.AdditionalSubtypeUtils;
 import com.emotion.chat.latin.utils.SubtypeLocaleUtils;
+
+import java.util.TreeSet;
 
 final class CustomInputStylePreference extends DialogPreference
         implements DialogInterface.OnCancelListener {
@@ -45,8 +45,11 @@ final class CustomInputStylePreference extends DialogPreference
 
     interface Listener {
         void onRemoveCustomInputStyle(CustomInputStylePreference stylePref);
+
         void onSaveCustomInputStyle(CustomInputStylePreference stylePref);
+
         void onAddCustomInputStyle(CustomInputStylePreference stylePref);
+
         SubtypeLocaleAdapter getSubtypeLocaleAdapter();
         KeyboardLayoutSetAdapter getKeyboardLayoutSetAdapter();
     }
@@ -303,7 +306,6 @@ final class CustomInputStylePreference extends DialogPreference
                     items.add(new SubtypeLocaleItem(subtype));
                 }
             }
-            // TODO: Should filter out already existing combinations of locale and layout.
             addAll(items);
         }
     }
@@ -332,7 +334,6 @@ final class CustomInputStylePreference extends DialogPreference
 
             final String[] predefinedKeyboardLayoutSet = context.getResources().getStringArray(
                     R.array.predefined_layouts);
-            // TODO: Should filter out already existing combinations of locale and layout.
             for (final String layout : predefinedKeyboardLayoutSet) {
                 // This is a dummy subtype with NO_LANGUAGE, only for display.
                 final InputMethodSubtype subtype =

@@ -33,14 +33,14 @@ import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.HashSet;
-
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.internal.KeyDrawParams;
 import com.emotion.chat.keyboard.internal.KeyVisualAttributes;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.settings.Settings;
 import com.emotion.chat.latin.utils.TypefaceUtils;
+
+import java.util.HashSet;
 
 /**
  * A view that renders a virtual {@link Keyboard}.
@@ -96,7 +96,6 @@ public class KeyboardView extends View {
     private static final float MAX_LABEL_RATIO = 0.90f;
 
     // Main keyboard
-    // TODO: Consider having a dummy keyboard object to make this @NonNull
     private Keyboard mKeyboard;
     private final KeyDrawParams mKeyDrawParams = new KeyDrawParams();
 
@@ -219,7 +218,6 @@ public class KeyboardView extends View {
         if (bufferNeedsUpdates || mOffscreenBuffer == null) {
             if (maybeAllocateOffscreenBuffer()) {
                 mInvalidateAllKeys = true;
-                // TODO: Stop using the offscreen canvas even when in software rendering
                 mOffscreenCanvas.setBitmap(mOffscreenBuffer);
             }
             onDrawKeyboard(mOffscreenCanvas);
@@ -265,7 +263,6 @@ public class KeyboardView extends View {
         // Calculate clip region and set.
         final boolean drawAllKeys = mInvalidateAllKeys || mInvalidatedKeys.isEmpty();
         final boolean isHardwareAccelerated = canvas.isHardwareAccelerated();
-        // TODO: Confirm if it's really required to draw all keys when hardware acceleration is on.
         if (drawAllKeys || isHardwareAccelerated) {
             if (!isHardwareAccelerated && background != null) {
                 // Need to draw keyboard background on {@link #mOffscreenBuffer}.
@@ -410,7 +407,6 @@ public class KeyboardView extends View {
         if (hintLabel != null) {
             paint.setTextSize(key.selectHintTextSize(params));
             paint.setColor(key.selectHintTextColor(params));
-            // TODO: Should add a way to specify type face for hint letters
             paint.setTypeface(Typeface.DEFAULT_BOLD);
             blendAlpha(paint, params.mAnimAlpha);
             final float labelCharHeight = TypefaceUtils.getReferenceCharHeight(paint);

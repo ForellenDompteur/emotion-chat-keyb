@@ -24,9 +24,6 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.util.Locale;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.KeyboardTheme;
 import com.emotion.chat.latin.AudioAndHapticFeedbackManager;
@@ -34,6 +31,9 @@ import com.emotion.chat.latin.InputAttributes;
 import com.emotion.chat.latin.utils.AdditionalSubtypeUtils;
 import com.emotion.chat.latin.utils.ResourceUtils;
 import com.emotion.chat.latin.utils.RunInLocale;
+
+import java.util.Locale;
+import java.util.concurrent.locks.ReentrantLock;
 
 public final class Settings implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = Settings.class.getSimpleName();
@@ -100,8 +100,6 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         mSettingsValuesLock.lock();
         try {
             if (mSettingsValues == null) {
-                // TODO: Introduce a static function to register this class and ensure that
-                // loadSettings must be called before "onSharedPreferenceChanged" is called.
                 Log.w(TAG, "onSharedPreferenceChanged called before loadSettings.");
                 return;
             }
@@ -129,7 +127,6 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         }
     }
 
-    // TODO: Remove this method and add proxy method to SettingsValues.
     public SettingsValues getCurrent() {
         return mSettingsValues;
     }

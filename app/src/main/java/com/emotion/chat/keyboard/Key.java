@@ -22,9 +22,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.internal.KeyDrawParams;
 import com.emotion.chat.keyboard.internal.KeySpecParser;
@@ -36,6 +33,9 @@ import com.emotion.chat.keyboard.internal.KeyboardRow;
 import com.emotion.chat.keyboard.internal.MoreKeySpec;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.common.StringUtils;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 import static com.emotion.chat.keyboard.internal.KeyboardIconsSet.ICON_UNDEFINED;
 import static com.emotion.chat.latin.common.Constants.CODE_OUTPUT_TEXT;
@@ -132,7 +132,6 @@ public class Key implements Comparable<Key> {
             (MORE_KEYS_FLAGS_FIXED_COLUMN | MORE_KEYS_FLAGS_FIXED_ORDER);
     private static final int MORE_KEYS_FLAGS_HAS_LABELS = 0x40000000;
     private static final int MORE_KEYS_FLAGS_NO_PANEL_AUTO_MORE_KEY = 0x10000000;
-    // TODO: Rename these specifiers to !autoOrder! and !fixedOrder! respectively.
     private static final String MORE_KEYS_AUTO_COLUMN_ORDER = "!autoColumnOrder!";
     private static final String MORE_KEYS_FIXED_COLUMN_ORDER = "!fixedColumnOrder!";
     private static final String MORE_KEYS_HAS_LABELS = "!hasLabels!";
@@ -208,7 +207,6 @@ public class Key implements Comparable<Key> {
         mHintLabel = hintLabel;
         mLabelFlags = labelFlags;
         mBackgroundType = backgroundType;
-        // TODO: Pass keyActionFlags as an argument.
         mActionFlags = ACTION_FLAGS_NO_KEY_PREVIEW;
         mMoreKeys = null;
         mMoreKeysColumnAndFlags = 0;

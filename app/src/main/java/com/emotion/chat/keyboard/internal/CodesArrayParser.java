@@ -21,21 +21,7 @@ import android.text.TextUtils;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.common.StringUtils;
 
-/**
- * The string parser of codesArray specification for <GridRows />. The attribute codesArray is an
- * array of string.
- * Each element of the array defines a key label by specifying a code point as a hexadecimal string.
- * A key label may consist of multiple code points separated by comma.
- * Each element of the array optionally can have an output text definition after vertical bar
- * marker. An output text may consist of multiple code points separated by comma.
- * The format of the codesArray element should be:
- * <pre>
- *   label1[,label2]*(|outputText1[,outputText2]*(|minSupportSdkVersion)?)?
- * </pre>
- */
-// TODO: Write unit tests for this class.
 public final class CodesArrayParser {
-    // Constants for parsing.
     private static final char COMMA = Constants.CODE_COMMA;
     private static final String COMMA_REGEX = StringUtils.newSingleCodePointString(COMMA);
     private static final String VERTICAL_BAR_REGEX = // "\\|"
@@ -43,7 +29,7 @@ public final class CodesArrayParser {
     private static final int BASE_HEX = 16;
 
     private CodesArrayParser() {
-     // This utility class is not publicly instantiable.
+     // Utility class, not publicly instantiable.
     }
 
     private static String getLabelSpec(final String codesArraySpec) {

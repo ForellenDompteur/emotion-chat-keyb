@@ -23,12 +23,12 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
-import com.emotion.chat.compat.ViewOutlineProviderCompatUtils.InsetsUpdater;
+import com.emotion.chat.compat.ViewOutlineCompatUtils.InsetsUpdater;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class ViewOutlineProviderCompatUtilsLXX {
-    private ViewOutlineProviderCompatUtilsLXX() {
-        // This utility class is not publicly instantiable.
+class ViewOutlineCompatUtilsL {
+    private ViewOutlineCompatUtilsL() {
+        // Utility class, not publicly instantiable
     }
 
     static InsetsUpdater setInsetsOutlineProvider(final View view) {
@@ -64,7 +64,6 @@ class ViewOutlineProviderCompatUtilsLXX {
                 ViewOutlineProvider.BACKGROUND.getOutline(view, outline);
                 return;
             }
-            // TODO: Revisit this when floating/resize keyboard is supported.
             outline.setRect(
                     view.getLeft(), mLastVisibleTopInsets, view.getRight(), view.getBottom());
         }

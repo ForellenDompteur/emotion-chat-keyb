@@ -31,7 +31,6 @@ public class ProximityInfo {
     private final int mGridSize;
     private final int mCellWidth;
     private final int mCellHeight;
-    // TODO: Find a proper name for mKeyboardMinWidth
     private final int mKeyboardMinWidth;
     private final int mKeyboardHeight;
     private final int mMostCommonKeyWidth;

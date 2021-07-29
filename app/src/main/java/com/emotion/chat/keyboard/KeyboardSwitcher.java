@@ -34,7 +34,7 @@ import com.emotion.chat.latin.LatinIME;
 import com.emotion.chat.latin.RichInputMethodManager;
 import com.emotion.chat.latin.settings.Settings;
 import com.emotion.chat.latin.settings.SettingsValues;
-import com.emotion.chat.latin.utils.CapsModeUtils;
+import com.emotion.chat.latin.utils.CapsUtils;
 import com.emotion.chat.latin.utils.LanguageOnSpacebarUtils;
 import com.emotion.chat.latin.utils.RecapitalizeStatus;
 import com.emotion.chat.latin.utils.ResourceUtils;
@@ -51,7 +51,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private KeyboardState mState;
 
     private KeyboardLayoutSet mKeyboardLayoutSet;
-    // TODO: The following {@link KeyboardTextsSet} should be in {@link KeyboardLayoutSet}.
     private final KeyboardTextsSet mKeyboardTextsSet = new KeyboardTextsSet();
 
     private KeyboardTheme mKeyboardTheme;
@@ -134,7 +133,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             final KeyboardSwitchState toggleState) {
         final SettingsValues currentSettingsValues = Settings.getInstance().getCurrent();
         setMainKeyboardFrame(currentSettingsValues, toggleState);
-        // TODO: pass this object to setKeyboard instead of getting the current values.
         final MainKeyboardView keyboardView = mKeyboardView;
         final Keyboard oldKeyboard = keyboardView.getKeyboard();
         final Keyboard newKeyboard = mKeyboardLayoutSet.getKeyboard(keyboardId);
@@ -157,7 +155,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         return null;
     }
 
-    // TODO: Remove this method. Come up with a more comprehensive way to reset the keyboard layout
     // when a keyboard layout set doesn't get reloaded in LatinIME.onStartInputViewInternal().
     public void resetKeyboardStateToAlphabet(final int currentAutoCapsState,
             final int currentRecapitalizeState) {
@@ -289,7 +286,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     public void requestUpdatingShiftState(final int autoCapsFlags, final int recapitalizeMode) {
         if (DEBUG_ACTION) {
             Log.d(TAG, "requestUpdatingShiftState: "
-                    + " autoCapsFlags=" + CapsModeUtils.flagsToString(autoCapsFlags)
+                    + " autoCapsFlags=" + CapsUtils.flagsToString(autoCapsFlags)
                     + " recapitalizeMode=" + RecapitalizeStatus.modeToString(recapitalizeMode));
         }
         mState.onUpdateShiftState(autoCapsFlags, recapitalizeMode);

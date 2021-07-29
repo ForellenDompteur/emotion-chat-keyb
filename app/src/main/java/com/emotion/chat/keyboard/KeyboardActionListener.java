@@ -54,7 +54,6 @@ public interface KeyboardActionListener {
      *            suggestion strip, it should be {@link Constants#SUGGESTION_STRIP_COORDINATE}.
      * @param isKeyRepeat true if this is a key repeat, false otherwise
      */
-    // TODO: change this to send an Event object instead
     void onCodeInput(int primaryCode, int x, int y, boolean isKeyRepeat);
 
     /**

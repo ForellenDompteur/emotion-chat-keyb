@@ -21,12 +21,12 @@ import android.text.TextUtils;
 
 public final class IntentUtils {
     private static final String EXTRA_INPUT_METHOD_ID = "input_method_id";
-    // TODO: Can these be constants instead of literal String constants?
+
     private static final String INPUT_METHOD_SUBTYPE_SETTINGS =
             "android.settings.INPUT_METHOD_SUBTYPE_SETTINGS";
 
     private IntentUtils() {
-        // This utility class is not publicly instantiable.
+        // Utility class, not publicly instantiable
     }
 
     public static Intent getInputLanguageSelectionIntent(final String inputMethodId,

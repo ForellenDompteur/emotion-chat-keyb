@@ -24,13 +24,10 @@ import com.emotion.chat.R;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.define.DebugFlags;
 
-// This hack is applied to certain classes of tablets.
-public final class BogusMoveEventDetector {
-    private static final String TAG = BogusMoveEventDetector.class.getSimpleName();
+public final class BogusMovementDetector {
+    private static final String TAG = BogusMovementDetector.class.getSimpleName();
     private static final boolean DEBUG_MODE = DebugFlags.DEBUG_ENABLED;
 
-    // Move these thresholds to resource.
-    // These thresholds' unit is a diagonal length of a key.
     private static final float BOGUS_MOVE_ACCUMULATED_DISTANCE_THRESHOLD = 0.53f;
 
     private static boolean sNeedsProximateBogusDownMoveUpEventHack;

@@ -70,7 +70,6 @@ public final class KeyboardTheme {
 
     /* package private for testing */
     static KeyboardTheme searchKeyboardThemeById(final int themeId) {
-        // TODO: This search algorithm isn't optimal if there are many themes.
         for (final KeyboardTheme theme : KEYBOARD_THEMES) {
             if (theme.mThemeId == themeId) {
                 return theme;

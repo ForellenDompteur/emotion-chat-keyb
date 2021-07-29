@@ -26,13 +26,6 @@ import android.util.SparseArray;
 import android.util.Xml;
 import android.view.inputmethod.EditorInfo;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
-
 import com.emotion.chat.R;
 import com.emotion.chat.keyboard.internal.KeyboardBuilder;
 import com.emotion.chat.keyboard.internal.KeyboardParams;
@@ -41,6 +34,13 @@ import com.emotion.chat.latin.InputAttributes;
 import com.emotion.chat.latin.RichInputMethodSubtype;
 import com.emotion.chat.latin.utils.InputTypeUtils;
 import com.emotion.chat.latin.utils.XmlParseUtils;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
 
 import static com.emotion.chat.latin.common.Constants.ImeOption.NO_SETTINGS_KEY;
 
@@ -94,7 +94,6 @@ public final class KeyboardLayoutSet {
     public static final class Params {
         String mKeyboardLayoutSetName;
         int mMode;
-        // TODO: Use {@link InputAttributes} instead of these variables.
         EditorInfo mEditorInfo;
         boolean mNoSettingsKey;
         boolean mLanguageSwitchKeyEnabled;
@@ -215,7 +214,6 @@ public final class KeyboardLayoutSet {
 
             final EditorInfo editorInfo = (ei != null) ? ei : EMPTY_EDITOR_INFO;
             params.mMode = getKeyboardMode(editorInfo);
-            // TODO: Consolidate those with {@link InputAttributes}.
             params.mEditorInfo = editorInfo;
             params.mNoSettingsKey = InputAttributes.inPrivateImeOptions(
                     mPackageName, NO_SETTINGS_KEY, editorInfo);
@@ -228,7 +226,6 @@ public final class KeyboardLayoutSet {
         }
 
         public Builder setSubtype(final RichInputMethodSubtype subtype) {
-            // TODO: Consolidate with {@link InputAttributes}.
             mParams.mSubtype = subtype;
             mParams.mKeyboardLayoutSetName = KEYBOARD_LAYOUT_SET_RESOURCE_PREFIX
                     + subtype.getKeyboardLayoutSetName();

@@ -78,8 +78,6 @@ public abstract class SubScreenFragment extends PreferenceFragment
                 final Context context = fragment.getActivity();
                 if (context == null || fragment.getPreferenceScreen() == null) {
                     final String tag = fragment.getClass().getSimpleName();
-                    // TODO: Introduce a static function to register this class and ensure that
-                    // onCreate must be called before "onSharedPreferenceChanged" is called.
                     Log.w(tag, "onSharedPreferenceChanged called before activity starts.");
                     return;
                 }

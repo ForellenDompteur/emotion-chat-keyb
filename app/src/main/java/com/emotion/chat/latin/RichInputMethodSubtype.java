@@ -20,13 +20,13 @@ import android.os.Build;
 import android.util.Log;
 import android.view.inputmethod.InputMethodSubtype;
 
-import java.util.HashMap;
-import java.util.Locale;
-
 import com.emotion.chat.R;
-import com.emotion.chat.compat.InputMethodSubtypeCompatUtils;
+import com.emotion.chat.compat.InputMethodCompatUtils;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.utils.SubtypeLocaleUtils;
+
+import java.util.HashMap;
+import java.util.Locale;
 
 import static com.emotion.chat.latin.common.Constants.Subtype.KEYBOARD_MODE;
 
@@ -44,7 +44,6 @@ public class RichInputMethodSubtype {
         final HashMap<Locale, Locale> map = new HashMap<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Locale#forLanguageTag is available on API Level 21+.
-            // TODO: Remove this workaround once when we become able to deal with "sr-Latn".
             map.put(Locale.forLanguageTag("sr-Latn"), new Locale("sr_ZZ"));
         }
         return map;
@@ -56,7 +55,7 @@ public class RichInputMethodSubtype {
 
     public RichInputMethodSubtype(final InputMethodSubtype subtype) {
         mSubtype = subtype;
-        mOriginalLocale = InputMethodSubtypeCompatUtils.getLocaleObject(mSubtype);
+        mOriginalLocale = InputMethodCompatUtils.getLocaleObject(mSubtype);
         final Locale mappedLocale = sLocaleMap.get(mOriginalLocale);
         mLocale = mappedLocale != null ? mappedLocale : mOriginalLocale;
     }
@@ -131,7 +130,6 @@ public class RichInputMethodSubtype {
         return mLocale;
     }
 
-    // TODO: remove this method
     public InputMethodSubtype getRawSubtype() { return mSubtype; }
 
     public String getKeyboardLayoutSetName() {

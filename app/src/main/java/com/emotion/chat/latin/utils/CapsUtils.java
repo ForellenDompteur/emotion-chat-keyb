@@ -19,13 +19,13 @@ package com.emotion.chat.latin.utils;
 import android.text.InputType;
 import android.text.TextUtils;
 
-import java.util.ArrayList;
-
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.settings.SpacingAndPunctuations;
 
-public final class CapsModeUtils {
-    private CapsModeUtils() {
+import java.util.ArrayList;
+
+public final class CapsUtils {
+    private CapsUtils() {
         // This utility class is not publicly instantiable.
     }
 
@@ -86,12 +86,7 @@ public final class CapsModeUtils {
             return TextUtils.CAP_MODE_CHARACTERS & reqModes;
         }
 
-        // Step 2 : Skip (ignore at the end of input) any opening punctuation. This includes
-        // opening parentheses, brackets, opening quotes, everything that *opens* a span of
-        // text in the linguistic sense. In RTL languages, this is still an opening sign, although
-        // it may look like a right parenthesis for example. We also include double quote and
-        // single quote since they aren't start punctuation in the unicode sense, but should still
-        // be skipped for English. TODO: does this depend on the language?
+        // Step 2 : Skip (ignore at the end of input) any opening punctuation.
         int i;
         for (i = cs.length(); i > 0; i--) {
             final char c = cs.charAt(i - 1);

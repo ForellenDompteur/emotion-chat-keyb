@@ -39,7 +39,6 @@
                         latin:additionalMoreKeys=":" />
                 </default>
             </switch>
-            <!-- TODO: Should find a way to compound Greek dialytika tonos and other Greek letters. -->
             <!--
             <switch>
                 <case
@@ -117,7 +116,6 @@
                         latin:additionalMoreKeys="1" />
                 </default>
             </switch>
-            <!-- TODO: Should find a way to compound Greek dialytika tonos and other Greek letters. -->
             <!--
             <switch>
                 <case

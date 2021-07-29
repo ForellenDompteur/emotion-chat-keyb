@@ -39,7 +39,6 @@
             <!-- U+0642: "ق" ARABIC LETTER QAF
                  U+0664: "٤" ARABIC-INDIC DIGIT FOUR
                  U+06A8: "ڨ" ARABIC LETTER QAF WITH THREE DOTS ABOVE -->
-            <!-- TODO: DroidSansArabic lacks the glyph of U+06A8 ARABIC LETTER QAF WITH THREE DOTS ABOVE -->
             <Key
                 latin:keySpec="&#x0642;"
                 latin:additionalMoreKeys="&#x0664;"
@@ -49,8 +48,6 @@
                  U+06A4: "ڤ" ARABIC LETTER VEH
                  U+06A2: "ڢ" ARABIC LETTER FEH WITH DOT MOVED BELOW
                  U+06A5: "ڥ" ARABIC LETTER FEH WITH THREE DOTS BELOW -->
-            <!-- TODO: DroidSansArabic lacks the glyph of U+06A2 ARABIC LETTER FEH WITH DOT MOVED BELOW -->
-            <!-- TODO: DroidSansArabic lacks the glyph of U+06A5 ARABIC LETTER FEH WITH THREE DOTS BELOW -->
             <Key
                 latin:keySpec="&#x0641;"
                 latin:additionalMoreKeys="&#x0665;"
@@ -106,7 +103,6 @@
             <!-- U+0642: "ق" ARABIC LETTER QAF
                  U+0664: "٤" ARABIC-INDIC DIGIT FOUR
                  U+06A8: "ڨ" ARABIC LETTER QAF WITH THREE DOTS ABOVE -->
-            <!-- TODO: DroidSansArabic lacks the glyph of U+06A8 ARABIC LETTER QAF WITH THREE DOTS ABOVE -->
             <Key
                 latin:keySpec="&#x0642;"
                 latin:keyHintLabel="4"
@@ -117,8 +113,6 @@
                  U+06A4: "ڤ" ARABIC LETTER VEH
                  U+06A2: "ڢ" ARABIC LETTER FEH WITH DOT MOVED BELOW
                  U+06A5: "ڥ" ARABIC LETTER FEH WITH THREE DOTS BELOW -->
-            <!-- TODO: DroidSansArabic lacks the glyph of U+06A2 ARABIC LETTER FEH WITH DOT MOVED BELOW -->
-            <!-- TODO: DroidSansArabic lacks the glyph of U+06A5 ARABIC LETTER FEH WITH THREE DOTS BELOW -->
             <Key
                 latin:keySpec="&#x0641;"
                 latin:keyHintLabel="5"
