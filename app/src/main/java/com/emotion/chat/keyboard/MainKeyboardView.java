@@ -26,6 +26,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,10 +49,14 @@ import com.emotion.chat.latin.RichInputMethodManager;
 import com.emotion.chat.latin.RichInputMethodSubtype;
 import com.emotion.chat.latin.common.Constants;
 import com.emotion.chat.latin.common.CoordinateUtils;
-import com.emotion.chat.latin.inputlogic.SensorData;
 import com.emotion.chat.latin.utils.LanguageOnSpacebarUtils;
 import com.emotion.chat.latin.utils.TypefaceUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.WeakHashMap;
 
 /**
@@ -94,10 +100,6 @@ import java.util.WeakHashMap;
  */
 public final class MainKeyboardView extends KeyboardView implements MoreKeysPanel.Controller, DrawingProxy {
     private static final String TAG = MainKeyboardView.class.getSimpleName();
-
-    // Motion tracking
-    //private VelocityTracker mVelocityTracker = null;
-    public static SensorData sensorData;
 
     /** Listener for {@link KeyboardActionListener}. */
     private KeyboardActionListener mKeyboardActionListener;
@@ -327,7 +329,7 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
             Log.w(TAG, "Cannot find root view");
             return;
         }
-        final ViewGroup windowContentView = (ViewGroup)rootView.findViewById(android.R.id.content);
+        final ViewGroup windowContentView = rootView.findViewById(android.R.id.content);
         // Note: It'd be very weird if we get null by android.R.id.content.
         if (windowContentView == null) {
             Log.w(TAG, "Cannot find android.R.id.content view to add DrawingPreviewPlacerView");
@@ -520,20 +522,74 @@ public final class MainKeyboardView extends KeyboardView implements MoreKeysPane
         return processMotionEvent(event);
     }
 
+    public String getExternalStoragePath() {
+
+        String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String[] paths = internalPath.split("/");
+        String parentPath = "/";
+        for (String s : paths) {
+            if (s.trim().length() > 0) {
+                parentPath = parentPath.concat(s);
+                break;
+            }
+        }
+        File parent = new File(parentPath);
+        if (parent.exists()) {
+            File[] files = parent.listFiles();
+            for (File file : files) {
+                String filePath = file.getAbsolutePath();
+                Log.d(TAG, filePath);
+                if (filePath.equals(internalPath)) {
+                    continue;
+                } else if (filePath.toLowerCase().contains("sdcard")) {
+                    return filePath;
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    try {
+                        if (Environment.isExternalStorageRemovable(file)) {
+                            return filePath;
+                        }
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "RuntimeException: " + e);
+                    }
+                }
+            }
+
+        }
+        return null;
+    }
+
+    public void writeMetaDataToInternalStorage(String metaData) {
+        String path = getExternalStoragePath();
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy", Locale.getDefault());
+        String sFileName = "metadata_files_" + sdf.format(new Date()) + ".txt";
+        File dir = new File(path + "/metadata", sFileName);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        try {
+            FileOutputStream keyboardFOut = new FileOutputStream(sFileName, true);
+            keyboardFOut.write(metaData.getBytes());
+            keyboardFOut.flush();
+            keyboardFOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean processMotionEvent(final MotionEvent event) {
         final int index = event.getActionIndex();
         final int id = event.getPointerId(index);
         final float pressure = event.getPressure(index);
         final float size = event.getSize();
-        int action = event.getActionMasked();
-
-        if (sensorData != null) {
-            sensorData.setSize(size);
-        }
-
 
         Log.d("Pressure2", String.valueOf(pressure));
         Log.d("Size", String.valueOf(size));
+
+        String metaData = "Index: " + index + ", " + "ID: " + id + ", " + "Pressure: " + pressure + ", " + "Size: " + size;
+        writeMetaDataToInternalStorage(metaData);
 
 
 //        switch(action) {

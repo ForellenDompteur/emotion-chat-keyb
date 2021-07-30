@@ -176,7 +176,6 @@ public final class InputLogic {
 
             // This implementation does not require storage read/write permissions from the user
             // Stores in Internal Storage > Android > data > com.emotion.chat
-
             File outfile = new File(mLatinIME.getExternalFilesDir(null), fileName);
             FileOutputStream keyboardFOut = new FileOutputStream(outfile,true);
             keyboardFOut.write(fileContents.getBytes());
